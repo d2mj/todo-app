@@ -12,42 +12,26 @@ export const INITIAL_STATE : IAppState = {
 	arr : []
 };
 
-function getTodoArray(arr, payload){
-	
-	for (var i =0; i < arr.length; i++)
-			if (arr[i].title === payload.title) {
-				arr.splice(i,1);
-			break;
-	}	
-	return arr;
-			
-}
-
-function addTodoArray(arr, payload){
-	arr.push(payload);
-	return arr;
-}
-
 export function rootReducer(state : IAppState, action: any) : any {
 	switch (action.type) {
 		case CounterActions.INCREMENT: return {
 			count: state.count + 1, 
-			arr: state.arr
+			arr: state.arr.map(todo => todo)
 		};
 			
 		case CounterActions.DECREMENT: return {
 			count: state.count - 1, 	
-			arr: state.arr		
+			arr: state.arr.map(todo => todo)		
 		};
 		
 		case CounterActions.ADD_TODO: return { 
-			count: state.count,
-			arr: addTodoArray(state.arr, action.payload)
+			count: state.count+10,
+			arr: state.arr.concat(action.payload) 
 		};
 
 		case CounterActions.REMOVE_TODO: return {
-			count: state.count, 
-			arr: getTodoArray(state.arr, action.payload)
+			count: state.count-10, 
+			arr: state.arr.filter(todo=> todo.id !== action.payload.id)
 		}
 
 		default:

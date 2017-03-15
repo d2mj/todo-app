@@ -20,27 +20,31 @@ import {TodoDataService} from './todo-data.service';
 export class AppComponent implements OnInit {
 
   ngOnInit(){
-      this.obj.subscribe(res =>{
-        console.log("jo bhi ", res);
-      })
+      
   }
-  @select(['arr']) obj : Observable <any>;
+//  @select(['arr']) obj : Observable <any>;
   
     todos;
     newTodo : Todo = new Todo();
-    count: number;
-    subscription;
+    countSubscription;
+    arrSubscription;
 
   constructor(private todoDataService: TodoDataService, 
               private ngRedux: NgRedux<IAppState>,
               private actions: CounterActions){
  	   this.todos = this.todoDataService.todos;
-     this.subscription = ngRedux.select<number>('count')
-                         .subscribe(newCount => this.count = newCount);
+     this.countSubscription = this.ngRedux.select<number>('count')
+                         .subscribe(newCount => {
+                           console.log('count: ', newCount)});
+     this.arrSubscription = this.ngRedux.select<any>('arr')
+                         .subscribe(res =>{
+                            console.log("array:  ", res);
+     })
   }
 
   ngOnDestroy(){
-    this.subscription.unsubscribe();
+    this.countSubscription.unsubscribe();
+    this.arrSubscription.unsubscribe();
   }
 
   addTodo(){
